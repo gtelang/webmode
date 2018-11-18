@@ -1,61 +1,24 @@
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;; HELPER FUNCTIONS FOR BOTH WEAVING AND TANGLING
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-(defun web-mode-get-named-code-chunk-info
-    " For each code-chunk that has a name, 
-      get information about which section
-      it is defined in and where the code-chunk 
-      is used. For positional information
-      follow the part-chapter-section route
-      or chapter-section-subsection route. 
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;; WEB MODE
+;;; A mode derived from org-mode, for
+;;; literate programming in the Knuthian
+;;; tradition. 
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+(define-derived-mode web-mode org-mode
+  " Major mode for literate programming 
+    in the style of Knuth built on top 
+    of Org mode."
+  (kill-all-local-variables)
+  (setq major-mode 'web-mode)
+  (setq mode-name "Web Mode")
 
-      Thus the \newchunk command should be defined
-      in two ways depending on whether the 
-      documentclass type is a book or article
-      for extracting the positional information. 
-
-      This information will also get used in a 
-      chapter-wise index used at the end of each 
-      chapter and finally the book. 
-    "
+  ;; From here on out, just define various
+  ;; functions, and them to the appropriate
+  ;; hooks. Most of the functions are
+  ;; interactive, and which will operate
+  ;; on the whole buffer or highlighted
+  ;; portions of text. 
   )
-;————————————————————————————
-;; Make company mode always list the currently
-;; named code-blocks
-
-
-;————————————————————————————
-;; Make each code-block hyper-linkable, so that you can
-;; immediately jump either to place where the code-chunk
-;; is originally defined, or just previously change
-;; changed. 
-
-;————————————————————————————
-;; Use etags to generate list of types and variables
-;; inside various name-spaces and then instead of
-;; line-numbers, substitue them with chapter-section
-;; numbers corresponding to the pdf. 
-
-
-;————————————————————————————
-;; Scan every token inside code-block and throw-away
-;; all the unnecessary tokens, 
-
-
-;————————————————————————————
-;; Latexify all the math things used inside
-;; code-blocks. Thus you can make α and β
-;; inside comments! This is however just a
-;; fancy feature, not needed right now. 
-
-
-;————————————————————————————
-
-;; Decide background for current block. If code
-;; block is being freshly defined then use one
-;; color, else use different color, alternatively
-;; keep a bold red unwritable tag marker.
-
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;; TANGLING
@@ -116,21 +79,62 @@
 
 ; Note the See also .... mentions where a particular code
 ; block is incremented and extended. 
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;;; THE WEB MODE ITSELF.
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-(define-derived-mode web-mode org-mode
-  " Major mode for literate programming 
-    in the style of Knuth built on top 
-    of Org mode."
-  (kill-all-local-variables)
-  (setq major-mode 'web-mode)
-  (setq mode-name "Web Mode")
 
-  ;; From here on out, just define various
-  ;; functions, and them to the appropriate
-  ;; hooks. Most of the functions are
-  ;; interactive, and which will operate
-  ;; on the whole buffer or highlighted
-  ;; portions of text. 
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; HELPER FUNCTIONS FOR BOTH WEAVING AND TANGLING
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+(defun web-mode-get-named-code-chunk-info
+    " For each code-chunk that has a name, 
+      get information about which section
+      it is defined in and where the code-chunk 
+      is used. For positional information
+      follow the part-chapter-section route
+      or chapter-section-subsection route. 
+
+      Thus the \newchunk command should be defined
+      in two ways depending on whether the 
+      documentclass type is a book or article
+      for extracting the positional information. 
+
+      This information will also get used in a 
+      chapter-wise index used at the end of each 
+      chapter and finally the book. 
+    "
   )
+;————————————————————————————
+;; Make company mode always list the currently
+;; named code-blocks
+
+
+;————————————————————————————
+;; Make each code-block hyper-linkable, so that you can
+;; immediately jump either to place where the code-chunk
+;; is originally defined, or just previously change
+;; changed. 
+
+;————————————————————————————
+;; Use etags to generate list of types and variables
+;; inside various name-spaces and then instead of
+;; line-numbers, substitue them with chapter-section
+;; numbers corresponding to the pdf. 
+
+
+;————————————————————————————
+;; Scan every token inside code-block and throw-away
+;; all the unnecessary tokens, 
+
+
+;————————————————————————————
+;; Latexify all the math things used inside
+;; code-blocks. Thus you can make α and β
+;; inside comments! This is however just a
+;; fancy feature, not needed right now. 
+
+
+;————————————————————————————
+
+;; Decide background for current block. If code
+;; block is being freshly defined then use one
+;; color, else use different color, alternatively
+;; keep a bold red unwritable tag marker.
+

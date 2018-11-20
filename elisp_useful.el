@@ -1,3 +1,5 @@
+(require 'cl-lib)
+
 (when (< 1 2)
   (message "Hello World"))
 
@@ -17,6 +19,11 @@
 (region-ending);
 ;; move cursor to position 392
 (goto-char 392)
+
+;;move forward or backward some number of lines
+(forward-line 2)
+(forward-line -2)
+
 ;; move cursor by 9 chars
 (forward-char 2)
 (backward-char 9)
@@ -44,14 +51,20 @@
 ; nothing but the equivalent of a for-loop 
 ; albet one you can't break out of? 
 (dotimes (i 10)
-    (print i)
-  )
+  (print i))
+
+;; But don't forget the great while loop
+;; the typical pattern here would often be
+while(  (and.. ..) BODY....  )
+;; there is a state variable inside the and, which 
+;; keeps changing in the body and that you check at 
+;; the beginning of each iteration. 
+
 
 ;; preserve {point, mark, current buffer}
 (save-excursion
   ;; lisp code here involving moving cursor, mark, changing buffer.
-  (beginning-of-buffer)
-)
+  (beginning-of-buffer))
 
 (current-buffer) ; return the whole current-buffer
 (read-only-mode) ; toggle the read-only mode state of the buffer the point is in. 
@@ -65,8 +78,6 @@
 (length myarr)
 (elt myarr 3) ; Extract the ith element of a sequence.
 (aref myarr 3) ; Works for arrays, and apparently faster? ftp://ftp.gnu.org/pub/old-gnu/Manuals/elisp-manual-20-2.5/html_chapter/elisp_7.html
-
-
 
 ;; Yay! for generating lists
 (number-sequence 0 10)
@@ -94,7 +105,6 @@
 (make-local-variable 'test)
 (setq test 4)
 
-
 ;; Variations on saving state of the current buffer and doing some work
 ;; or use another temporary buffer. 
 ;; https://www.gnu.org/software/emacs/manual/html_node/elisp/Current-Buffer.html
@@ -108,6 +118,7 @@
 (line-end-position)
 
 ;; Regular expressions are awesome!
+;; https://stackoverflow.com/questions/53357471/using-regular-expressions-via-re-search-forward-in-elisp/53358196#53358196
 ;; You can search for specific strings or those belonging to specific patterns. 
 ;; Especially useful in codes for searching for specific strings. 
 ;; https://www.emacswiki.org/emacs/RegularExpression
@@ -177,14 +188,71 @@
 ;; worldworldworldworldworldworldworldworldworld
 
 
-;; https://stackoverflow.com/questions/53357471/using-regular-expressions-via-re-search-forward-in-elisp/53358196#53358196
+;; You are probably looking for after-save-hook to
+;; to update all the emacs data-structures, or
+;; whatever, don't do this when you are typing things
+;; else things will be become too slow. 
+
+
+;; to perform tab-expansion like <s in web-mode
+;; for whatever, use this
+;; https://orgmode.org/manual/Easy-templates.html#Easy-templates
+;; Nice customizations are available, else I think we will need to use 
+;; YAML will also be nice, for this probbaly, to make it more disciplined. 
 
 
 
-
-;; 
+;; https://emacs.stackexchange.com/a/46055/10896
+;; very useful for writing stuff to a buffer
+;; only for writing. the key was the inhibit-read-only
+;; flag. 
 (get-buffer-create "foo")
 (set-buffer "foo")
 (read-only-mode)
-(read-only-mode)
-(insert "Hello world")
+(let ((inhibit-read-only t))
+  (insert "\nGoodbye world"))
+
+;; The great dash libraries which
+;; gives you haskell like functionality
+;; for instance consider this.
+;; very useful! for some advanced manipulation. 
+(require 'dash-functional)
+(defun square (n) (* n n))
+
+(-map 'square '(1 2 3 4))
+(-zip-with '+ '(1 2 3) '(4 5 6)) 
+
+;; Radio Targets to create internal links in Org-mode.
+;; these can be incredibly helpful
+;; https://orgmode.org/manual/Radio-targets.html#Radio-targets
+;; These link to the nearest enclosing
+;; section/subsection or list which is ok when you
+;; are dealing with small chunks. 
+
+;; Most useful function ever! thing-at-pt
+;; it returns a string, you can return the line
+;; or word the cursor is on and much more. (forward-line)
+;; http://ergoemacs.org/emacs/elisp_text_editing_functions.html
+
+
+;; Another useful function is the numer-to-string.
+;; Ultimately many things have to be converted to strings
+;; before being inserted into the buffer. 
+
+
+;; http://ergoemacs.org/emacs/elisp_all_about_lines.html
+;; Also the buffer-substring is so important!
+;; Note see how buffer-substring is different from
+;; buffer-substring-no-properties, you will probably
+;; use this more than buffer-substring. With this, you
+;; get all the font properties of the text. 
+(buffer-substring-no-properties (point) (point-max))
+
+
+;; there is also a nice with-current-buffer function
+;; which allows you to create a temporary bufferm
+;; and then you can swutch back to the original buffer
+;; when the function is done. Found this here
+;; http://ergoemacs.org/emacs/elisp_buffer_file_functions.html
+;; And finally I would like to have a major mode.
+;; http://ergoemacs.org/emacs/elisp_write_major_mode_index.html
